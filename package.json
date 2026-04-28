@@ -8,7 +8,7 @@
   "files": ["extensions", "index.js", "lib", "README.md", "package.json"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/endgegnerbert-tech/pi-research.git"
+    "url": "git+https://github.com/endgegnerbert-tech/pi-research.git"
   },
   "homepage": "https://github.com/endgegnerbert-tech/pi-research#readme",
   "bugs": {

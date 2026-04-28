@@ -1,16 +1,28 @@
 # pi-research
 
+[![npm version](https://img.shields.io/npm/v/pi-research?color=blue)](https://www.npmjs.com/package/pi-research)
+[![tests](https://img.shields.io/badge/tests-33%2F33-brightgreen)](https://github.com/endgegnerbert-tech/pi-research)
+[![Pi package](https://img.shields.io/badge/pi-package-blueviolet)](https://pi.ai)
+
 `pi-research` is a Pi extension for web research.
 
 ## Install
+
+For Pi:
 
 ```bash
 pi install npm:pi-research
 ```
 
+For npm-based workflows:
+
+```bash
+npm install pi-research
+```
+
 GitHub repository: https://github.com/endgegnerbert-tech/pi-research
 
-You can also fork the GitHub repository and install it from a local path while developing.
+You can also fork the repository and install it from a local path while developing.
 
 ## What it is for
 
@@ -20,10 +32,12 @@ Use `browser_action` for clicks, screenshots, DOM inspection, or page interactio
 
 ## Modes
 
-- `fast` — quick search with a quality floor
-- `deep` — broader retrieval with follow-up rounds
-- `code` — prioritizes official docs, READMEs, repos, and code snippets
-- `academic` — searches scholarly sources like arXiv, Semantic Scholar, and DOI-based papers
+| Mode | Best for |
+| --- | --- |
+| `fast` | quick answers with a quality floor |
+| `deep` | broader retrieval with follow-up rounds |
+| `code` | official docs, READMEs, repos, and code snippets |
+| `academic` | scholarly sources like arXiv, Semantic Scholar, and DOI papers |
 
 ## Key features
 
@@ -35,7 +49,7 @@ Use `browser_action` for clicks, screenshots, DOM inspection, or page interactio
 - `files[]` for local source input
 - `codeBlocks[]` extraction for code-focused answers
 
-## Tool output
+## Output
 
 The tool returns structured data including:
 
@@ -56,7 +70,7 @@ The tool returns structured data including:
 - `conflictingSourcePairs`
 - `unverifiedClaims`
 
-## Example
+## Examples
 
 ```text
 What are the trade-offs between B-trees and LSM-trees?
@@ -64,6 +78,10 @@ What are the trade-offs between B-trees and LSM-trees?
 
 ```text
 Show me the best way to add health checks to Docker Compose.
+```
+
+```text
+Compare React Server Components with traditional SSR.
 ```
 
 ## Package manifest
@@ -75,6 +93,7 @@ This repo is a Pi package. The extension entrypoint is:
 ## Release notes
 
 - Package name: `pi-research`
-- Install command: `pi install npm:pi-research`
+- Install command for Pi: `pi install npm:pi-research`
+- Install command for npm: `npm install pi-research`
 - GitHub: `https://github.com/endgegnerbert-tech/pi-research`
 - Tool name: `pi-research`
