@@ -6,6 +6,14 @@
   "description": "Pi extension for web research.",
   "main": "./index.js",
   "files": ["extensions", "index.js", "lib", "README.md", "package.json"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/endgegnerbert-tech/pi-research.git"
+  },
+  "homepage": "https://github.com/endgegnerbert-tech/pi-research#readme",
+  "bugs": {
+    "url": "https://github.com/endgegnerbert-tech/pi-research/issues"
+  },
   "keywords": ["pi-package"],
   "scripts": {
     "test": "node --test"

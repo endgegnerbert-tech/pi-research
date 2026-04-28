@@ -8,6 +8,8 @@
 pi install npm:pi-research
 ```
 
+GitHub repository: https://github.com/endgegnerbert-tech/pi-research
+
 You can also fork the GitHub repository and install it from a local path while developing.
 
 ## What it is for
@@ -74,4 +76,5 @@ This repo is a Pi package. The extension entrypoint is:
 
 - Package name: `pi-research`
 - Install command: `pi install npm:pi-research`
+- GitHub: `https://github.com/endgegnerbert-tech/pi-research`
 - Tool name: `pi-research`
