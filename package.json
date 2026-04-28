@@ -1,11 +1,17 @@
 {
   "name": "pi-research",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "type": "module",
   "description": "Pi extension for web research.",
   "main": "./index.js",
-  "files": ["extensions", "index.js", "lib", "README.md", "package.json"],
+  "files": [
+    "extensions",
+    "index.js",
+    "lib",
+    "README.md",
+    "package.json"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/endgegnerbert-tech/pi-research.git"
@@ -14,7 +20,9 @@
   "bugs": {
     "url": "https://github.com/endgegnerbert-tech/pi-research/issues"
   },
-  "keywords": ["pi-package"],
+  "keywords": [
+    "pi-package"
+  ],
   "scripts": {
     "test": "node --test"
   },
@@ -28,6 +36,8 @@
     "typebox": "*"
   },
   "pi": {
-    "extensions": ["./extensions/pi-research.ts"]
+    "extensions": [
+      "./extensions/pi-research.ts"
+    ]
   }
 }
