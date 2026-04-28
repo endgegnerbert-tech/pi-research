@@ -1,8 +1,24 @@
-# pi-research
+# pi-research README Refresh Implementation Plan
 
-[![npm version](https://img.shields.io/npm/v/pi-research?color=blue)](https://www.npmjs.com/package/pi-research)
-[![tests](https://img.shields.io/badge/tests-33%2F33-brightgreen)](https://github.com/endgegnerbert-tech/pi-research)
-[![Pi package](https://img.shields.io/badge/pi-package-blueviolet)](https://pi.ai)
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Rewrite the README to present pi-research as a local, agent-friendly research tool with clearer English, stronger positioning, and complete usage guidance.
+
+**Architecture:** This is a documentation-only change. The only file to update is `README.md`. The new README should lead with a concise product explanation, clarify that the package does not rely on external research APIs or API keys, document the public tool parameters, and explain outputs, behavior, and limitations without mentioning browser automation.
+
+**Tech Stack:** Markdown, existing package metadata, existing tool schema.
+
+---
+
+### Task 1: Rewrite README.md
+
+**Files:**
+- Modify: `README.md`
+
+- [ ] **Step 1: Replace the README with the new English version**
+
+```md
+# pi-research
 
 `pi-research` is a Pi extension for fast, local-first web research inside the agent.
 
@@ -11,12 +27,12 @@ It does **not** require an external research API or API key, and it is not a bro
 
 ## Why it exists
 
-Agents usually need two things to answer well:
+Most agents need two things to answer well:
 
 1. a way to search the web efficiently
 2. a way to turn sources into a usable answer
 
-`pi-research` does both inside Pi, so the agent can research topics without relying on a separate hosted research service.
+`pi-research` does both inside Pi, so the agent can research topics without calling a separate hosted research service.
 
 ## What it does
 
@@ -32,7 +48,9 @@ Agents usually need two things to answer well:
 
 - not a browser interaction tool
 - not an offline knowledge base
-- not a replacement for page navigation
+- not a replacement for `browser_action`
+
+Use `browser_action` for clicks, screenshots, DOM inspection, or page interaction.
 
 ## Install
 
@@ -47,8 +65,6 @@ pi install npm:pi-research
 ```bash
 npm install pi-research
 ```
-
-GitHub repository: https://github.com/endgegnerbert-tech/pi-research
 
 ## Quick start
 
@@ -79,8 +95,7 @@ Compare React Server Components with traditional SSR.
 - `mode` — `fast`, `deep`, `code`, or `academic`
 - `force` — bypass cached sufficiency checks
 - `isolate` — run without session/query cache reuse
-- `options.allowedSources` — prefer only the listed source hints
-- `options.requireAuthoritative` — bias toward authoritative sources
+- `options.allowedSources` — restrict which source hints may be preferred
 - `options.maxTurns` — limit follow-up rounds
 - `options.maxSites` — limit how many sources are read
 - `options.minYear` / `options.maxYear` — constrain source dates
@@ -135,7 +150,7 @@ options:
 
 ## Output
 
-The tool returns structured data including:
+The tool returns structured data, including:
 
 - `answer`
 - `bullets`
@@ -157,7 +172,7 @@ The tool returns structured data including:
 
 - **query-isolated caching**: repeated identical research can be skipped when the previous result was already sufficient
 - **source scoring**: official docs, READMEs, papers, and local files are preferred over weak sources
-- **follow-up planning**: unclear or conflicting results trigger another round of research
+- **follow-up planning**: unclear or conflicting results trigger a second round of research
 - **conflict detection**: opposing claims are surfaced explicitly
 - **fact checking**: unsupported answer sentences are marked as unverified
 - **local source input**: files can be added directly to the research context
@@ -166,17 +181,33 @@ The tool returns structured data including:
 
 - it still depends on live web access for web research
 - it does not browse pages like a human user
+- it does not replace `browser_action`
 - it is not fully offline unless you only use local files
-- it is not a browser interaction tool
 
 ## Package info
 
 - Package name: `pi-research`
 - Entry point: `extensions/pi-research.ts`
-- Tool name: `pi-research`
+- GitHub: `https://github.com/endgegnerbert-tech/pi-research`
 
 ## Release notes
 
 - Pi install: `pi install npm:pi-research`
 - npm install: `npm install pi-research`
-- GitHub: `https://github.com/endgegnerbert-tech/pi-research`
+- Tool name: `pi-research`
+```
+
+- [ ] **Step 2: Verify the README reads cleanly and matches the public tool schema**
+
+Run: `node -e "const p=require('./package.json'); console.log(p.pi.extensions[0])"`
+Expected: prints `./extensions/pi-research.ts`
+
+Run: `npm test --silent`
+Expected: all tests pass
+
+- [ ] **Step 3: Commit the documentation-only change**
+
+```bash
+git add README.md docs/superpowers/plans/2026-04-28-readme-refresh.md
+git commit -m "docs: refresh pi-research README"
+```
