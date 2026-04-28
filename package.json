@@ -1,0 +1,25 @@
+{
+  "name": "pi-research",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "description": "Pi extension for web research.",
+  "main": "./index.js",
+  "files": ["extensions", "index.js", "lib", "README.md", "package.json"],
+  "keywords": ["pi-package"],
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@mariozechner/pi-ai": "^0.69.0",
+    "typebox": "^1.1.32"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-ai": "*",
+    "@mariozechner/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "pi": {
+    "extensions": ["./extensions/pi-research.ts"]
+  }
+}
