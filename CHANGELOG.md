@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.2
+
+### Added
+- MIT license.
+- Changelog file.
+
+### Changed
+- README now notes the MIT license.
+
+## 1.0.1
+
+### Changed
+- Package metadata and install details were updated.
+
 ## 1.0.0
 
 ### Added
