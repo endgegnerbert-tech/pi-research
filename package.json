@@ -4,6 +4,7 @@
   "private": false,
   "type": "module",
   "description": "Pi extension for web research.",
+  "license": "MIT",
   "main": "./index.js",
   "files": [
     "extensions",

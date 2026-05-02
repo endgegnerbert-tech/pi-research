@@ -174,6 +174,7 @@ The tool returns structured data including:
 - Package name: `pi-research`
 - Entry point: `extensions/pi-research.ts`
 - Tool name: `pi-research`
+- License: MIT
 
 ## Release notes
 
