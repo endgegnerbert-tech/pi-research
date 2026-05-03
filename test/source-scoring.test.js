@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildDeepQueries, detectConflictSignals, normalizePaperTitle, prioritizeSourceEntries, scoreSourceEntry } from "../lib/research.js";
+import { buildDeepQueries, detectClaimConflicts, detectCoverageGaps, detectConflictSignals, normalizePaperTitle, prioritizeSourceEntries, scoreSourceEntry } from "../lib/research.js";
 
 test("prioritizeSourceEntries prefers official docs over blogs", () => {
   const sources = [
@@ -56,4 +56,17 @@ test("detectConflictSignals ignores benign support wording variations", () => {
 test("normalizePaperTitle strips boilerplate prefixes", () => {
   assert.equal(normalizePaperTitle("Title: Example Paper"), "Example Paper");
   assert.equal(normalizePaperTitle("Paper: Semantic Paper"), "Semantic Paper");
+});
+
+test("detectClaimConflicts flags opposite claims with source evidence", () => {
+  const result = detectClaimConflicts([
+    { text: "Supported", source: "docs" },
+    { text: "Not supported", source: "issue" },
+  ]);
+  assert.equal(result.detected, true);
+});
+
+test("detectCoverageGaps asks for missing authoritative sources", () => {
+  const result = detectCoverageGaps({ claims: [{ text: "A", evidence: [] }] });
+  assert.ok(result.missingAspects.includes("authoritative sources"));
 });
