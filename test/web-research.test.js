@@ -486,3 +486,13 @@ test("runWebResearch can merge local files as sources", async () => {
   assert.equal(result.ok, true);
   assert.ok(result.sources.some((source) => source.url.startsWith("file://")));
 });
+
+test("compactResearchPayload keeps claim metadata", () => {
+  const compact = compactResearchPayload({
+    claims: [{ text: "Claim", confidence: "high", evidence: [{ type: "web", source: "https://example.com", snippet: "Claim" }] }],
+    evidenceSummary: "Multiple sources support the claim.",
+  });
+
+  assert.equal(compact.claims[0].text, "Claim");
+  assert.equal(compact.evidenceSummary, "Multiple sources support the claim.");
+});
