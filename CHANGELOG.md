@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- Domain packs for web, github, security, papers, specs, changelog, forums, package registries, and vendor status.
+- Eval harness with domain cases.
+
 ## 1.0.2
 
 ### Added

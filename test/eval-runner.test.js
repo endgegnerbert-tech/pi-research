@@ -12,3 +12,8 @@ test("runEvalSuite reports a pass rate", async () => {
   const result = await runEvalSuite({ domain: "web" });
   assert.equal(typeof result.passRate, "number");
 });
+
+test("github eval cases include an expected domain", () => {
+  const cases = loadEvalCases("github");
+  assert.equal(cases[0].expectedDomain, "github");
+});

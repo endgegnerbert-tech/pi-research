@@ -162,12 +162,28 @@ The tool returns structured data including:
 - **fact checking**: unsupported answer sentences are marked as unverified
 - **local source input**: files can be added directly to the research context
 
-## Limitations
+## Limits
 
 - it still depends on live web access for web research
 - it does not browse pages like a human user
 - it is not fully offline unless you only use local files
 - it is not a browser interaction tool
+
+## Domain packs
+
+- `web`
+- `github`
+- `security`
+- `papers`
+- `specs`
+- `changelog`
+- `forums`
+- `package-registry`
+- `vendor-status`
+
+## Eval
+
+Run `npm run eval` to execute the eval harness.
 
 ## Package info
 

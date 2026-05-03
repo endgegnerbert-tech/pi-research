@@ -25,7 +25,8 @@
     "pi-package"
   ],
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "eval": "node --test test/eval-runner.test.js"
   },
   "dependencies": {
     "@mariozechner/pi-ai": "^0.69.0",
