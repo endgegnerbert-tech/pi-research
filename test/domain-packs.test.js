@@ -35,3 +35,14 @@ test("package registry pack prefers npm and pypi sources", () => {
   assert.ok(pack.sourceHints.includes("npm"));
   assert.ok(pack.sourceHints.includes("pypi"));
 });
+
+test("papers pack prefers arxiv and scholarly sources", () => {
+  const pack = getDomainPack("papers");
+  assert.ok(pack.sourceHints.includes("arxiv"));
+  assert.ok(pack.sourceHints.includes("semanticscholar"));
+});
+
+test("vendor status pack prefers status page sources", () => {
+  const pack = getDomainPack("vendor-status");
+  assert.ok(pack.sourceHints.includes("status"));
+});
