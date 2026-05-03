@@ -1,22 +1,36 @@
 # pi-research
 
+![pi-research logo](docs/assets/pi-research-logo.png)
+
 [![npm version](https://img.shields.io/npm/v/pi-research?color=blue)](https://www.npmjs.com/package/pi-research)
 [![tests](https://img.shields.io/badge/tests-56%2F56-brightgreen)](https://github.com/endgegnerbert-tech/pi-research)
 [![Pi package](https://img.shields.io/badge/pi-package-blueviolet)](https://pi.ai)
 
-`pi-research` is a Pi extension for fast, local-first web research inside the agent.
+`pi-research` is a Pi extension for grounded web research.
+It searches, ranks, compares, and synthesizes sources inside the agent.
 
-It searches the live web, ranks sources, reads the most relevant pages, and synthesizes a grounded answer with citations.
-It does **not** require an external research API or API key, and it is not a browser automation tool.
+![community packs](docs/assets/pi-research-community.png)
 
 ## Why it exists
 
-Agents usually need two things to answer well:
+When agents answer well, they usually do three things:
 
-1. a way to search the web efficiently
-2. a way to turn sources into a usable answer
+1. search the right places
+2. prefer authoritative sources
+3. explain confidence and gaps clearly
 
-`pi-research` does both inside Pi, so the agent can research topics without relying on a separate hosted research service.
+`pi-research` does that without an external research service.
+
+## Best practices
+
+- use `fast` for short factual lookups
+- use `deep` for comparisons, conflicts, or unclear questions
+- use `code` for docs, repos, README-driven answers, and snippets
+- use `academic` for paper-heavy topics
+- set `options.requireAuthoritative: true` when source quality matters more than recall
+- use `options.format: json` when you need machine-readable output
+- add `options.files` when local docs matter
+- keep questions specific; vague prompts create noisy retrieval
 
 ## What it does
 
@@ -26,29 +40,13 @@ Agents usually need two things to answer well:
 - follows up when the first pass is not enough
 - extracts code blocks for code-focused questions
 - supports local files as additional sources
-- returns a structured result with citations and confidence metadata
+- returns structured results with citations, confidence, conflicts, and gaps
 
 ## What it is not
 
 - not a browser interaction tool
 - not an offline knowledge base
 - not a replacement for page navigation
-
-## Install
-
-### For Pi
-
-```bash
-pi install npm:pi-research
-```
-
-### For npm-based workflows
-
-```bash
-npm install pi-research
-```
-
-GitHub repository: https://github.com/endgegnerbert-tech/pi-research
 
 ## Quick start
 
@@ -57,11 +55,11 @@ What are the trade-offs between B-trees and LSM-trees?
 ```
 
 ```text
-Show me the best way to add health checks to Docker Compose.
+Compare React Server Components with traditional SSR.
 ```
 
 ```text
-Compare React Server Components with traditional SSR.
+How do I add retries to a Node.js fetch wrapper?
 ```
 
 ## Modes
@@ -72,6 +70,26 @@ Compare React Server Components with traditional SSR.
 | `deep` | broader retrieval with follow-up rounds |
 | `code` | docs, READMEs, repositories, and code snippets |
 | `academic` | scholarly sources and paper-heavy topics |
+
+## Output
+
+The tool returns structured data including:
+
+- `answer`
+- `bullets`
+- `sources`
+- `citations`
+- `codeBlocks`
+- `confidence`
+- `confidenceScore`
+- `sufficient`
+- `authoritativeSourcesFound`
+- `openSubQuestions`
+- `missingAspects`
+- `conflictSummary`
+- `unverifiedClaims`
+- `sourceTypes`
+- `meta`
 
 ## Public tool parameters
 
@@ -133,43 +151,9 @@ options:
     - ./docs/spec.md
 ```
 
-## Output
-
-The tool returns structured data including:
-
-- `answer`
-- `bullets`
-- `sources`
-- `citations`
-- `codeBlocks`
-- `confidence`
-- `confidenceScore`
-- `sufficient`
-- `authoritativeSourcesFound`
-- `openSubQuestions`
-- `missingAspects`
-- `conflictSummary`
-- `unverifiedClaims`
-- `sourceTypes`
-- `meta`
-
-## How it works
-
-- **query-isolated caching**: repeated identical research can be skipped when the previous result was already sufficient
-- **source scoring**: official docs, READMEs, papers, and local files are preferred over weak sources
-- **follow-up planning**: unclear or conflicting results trigger another round of research
-- **conflict detection**: opposing claims are surfaced explicitly
-- **fact checking**: unsupported answer sentences are marked as unverified
-- **local source input**: files can be added directly to the research context
-
-## Limits
-
-- it still depends on live web access for web research
-- it does not browse pages like a human user
-- it is not fully offline unless you only use local files
-- it is not a browser interaction tool
-
 ## Domain packs
+
+Built-in packs now steer routing and source selection:
 
 - `web`
 - `github`
@@ -183,9 +167,14 @@ The tool returns structured data including:
 
 ## Community packs
 
-You can add your own domain pack by copying `lib/domains/template.js`, adapting the `run()` function, and registering it in `lib/domains/index.js`.
+You can add your own domain pack without changing the core research engine:
 
-Minimal starter example:
+1. copy `lib/domains/template.js`
+2. implement your domain-specific `run(question, options)` logic
+3. register the pack in `lib/domains/index.js`
+4. add eval cases in `eval/cases/<your-domain>/`
+
+Starter example:
 
 ```js
 export default {
@@ -209,16 +198,24 @@ export default {
 
 Run `npm run eval` to execute the eval harness.
 
-## Package info
+## Install
 
-- Package name: `pi-research`
-- Entry point: `extensions/pi-research.ts`
-- Tool name: `pi-research`
-- License: MIT
+### For Pi
+
+```bash
+pi install npm:pi-research
+```
+
+### For npm-based workflows
+
+```bash
+npm install pi-research
+```
 
 ## Release notes
 
-- Pi install: `pi install npm:pi-research`
-- npm install: `npm install pi-research`
+- Package name: `pi-research`
+- Version: `1.1.0`
+- Entry point: `extensions/pi-research.ts`
+- License: MIT
 - GitHub: `https://github.com/endgegnerbert-tech/pi-research`
-- Community packs: copy the template pack and register it in `lib/domains/index.js`
