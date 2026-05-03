@@ -29,8 +29,9 @@
     "eval": "node --test test/eval-runner.test.js"
   },
   "dependencies": {
-    "@mariozechner/pi-ai": "^0.69.0",
-    "typebox": "^1.1.32"
+    "@mariozechner/pi-ai": "*",
+    "pi-research": "^1.0.2",
+    "typebox": "*"
   },
   "peerDependencies": {
     "@mariozechner/pi-ai": "*",
