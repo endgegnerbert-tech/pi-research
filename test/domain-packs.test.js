@@ -23,3 +23,15 @@ test("forums pack advertises stackoverflow and discourse sources", () => {
   assert.ok(pack.sourceHints.includes("stackoverflow"));
   assert.ok(pack.sourceHints.includes("discourse"));
 });
+
+test("security pack prefers advisories and CVE sources", () => {
+  const pack = getDomainPack("security");
+  assert.ok(pack.sourceHints.includes("cve"));
+  assert.ok(pack.sourceHints.includes("advisory"));
+});
+
+test("package registry pack prefers npm and pypi sources", () => {
+  const pack = getDomainPack("package-registry");
+  assert.ok(pack.sourceHints.includes("npm"));
+  assert.ok(pack.sourceHints.includes("pypi"));
+});
