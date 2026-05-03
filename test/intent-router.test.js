@@ -10,6 +10,14 @@ test("classifyQuestionDomain routes CVE questions to security", () => {
   assert.equal(classifyQuestionDomain("is this package affected by CVE-2025-1234"), "security");
 });
 
+test("classifyQuestionDomain keeps release-note questions out of papers", () => {
+  assert.equal(classifyQuestionDomain("What changed in the latest release notes for pi-research?"), "changelog");
+});
+
+test("classifyQuestionDomain keeps outage reports out of github", () => {
+  assert.equal(classifyQuestionDomain("Any outage or incident reported?"), "vendor-status");
+});
+
 test("normalizeResearchMode keeps explicit mode and default fallback", () => {
   assert.equal(normalizeResearchMode({ mode: "academic" }, "fast"), "academic");
   assert.equal(normalizeResearchMode({}, "fast"), "fast");
