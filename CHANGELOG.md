@@ -1,10 +1,20 @@
 # Changelog
 
-## Unreleased
+## 1.1.0
 
 ### Added
-- Domain packs for web, github, security, papers, specs, changelog, forums, package registries, and vendor status.
-- Eval harness with domain cases.
+- Domain packs now drive routing and source controls for web, github, security, papers, specs, changelog, forums, package-registry, and vendor-status.
+- Output formatting now supports `markdown`, `json`, `table`, and `latex`.
+- Community pack starter example at `lib/domains/template.js`.
+- README guidance for custom domain packs.
+- QA report for the universal research layer review.
+
+### Changed
+- Intent routing tightened for changelog and vendor-status queries.
+- Domain packs now bias search queries and source controls toward domain-specific sources.
+- Security, vendor-status, package-registry, forums, papers, specs, and changelog packs now prefer authoritative sources.
+- `requireAuthoritative` now affects runtime sufficiency checks.
+- `format` now affects tool output rendering.
 
 ## 1.0.2
 

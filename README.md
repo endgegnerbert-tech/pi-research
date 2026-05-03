@@ -1,7 +1,7 @@
 # pi-research
 
 [![npm version](https://img.shields.io/npm/v/pi-research?color=blue)](https://www.npmjs.com/package/pi-research)
-[![tests](https://img.shields.io/badge/tests-33%2F33-brightgreen)](https://github.com/endgegnerbert-tech/pi-research)
+[![tests](https://img.shields.io/badge/tests-56%2F56-brightgreen)](https://github.com/endgegnerbert-tech/pi-research)
 [![Pi package](https://img.shields.io/badge/pi-package-blueviolet)](https://pi.ai)
 
 `pi-research` is a Pi extension for fast, local-first web research inside the agent.
@@ -181,6 +181,30 @@ The tool returns structured data including:
 - `package-registry`
 - `vendor-status`
 
+## Community packs
+
+You can add your own domain pack by copying `lib/domains/template.js`, adapting the `run()` function, and registering it in `lib/domains/index.js`.
+
+Minimal starter example:
+
+```js
+export default {
+  name: "boxing-training",
+  sourceHints: ["web"],
+  async run(question) {
+    return {
+      claims: [
+        {
+          text: `Starter pack example for ${question}`,
+          evidence: [{ type: "web", source: "https://example.com", snippet: "Example" }],
+          confidence: "medium",
+        },
+      ],
+    };
+  },
+};
+```
+
 ## Eval
 
 Run `npm run eval` to execute the eval harness.
@@ -197,3 +221,4 @@ Run `npm run eval` to execute the eval harness.
 - Pi install: `pi install npm:pi-research`
 - npm install: `npm install pi-research`
 - GitHub: `https://github.com/endgegnerbert-tech/pi-research`
+- Community packs: copy the template pack and register it in `lib/domains/index.js`
