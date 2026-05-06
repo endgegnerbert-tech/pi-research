@@ -7,7 +7,7 @@ import { runWebResearch } from "./lib/web-research.js";
 const RESEARCH_STATE = new Map();
 
 function buildWebResearchGuidance() {
-  return "Use pi-research for live web research, page fetching, source comparison, and cited summaries. Prefer it for current facts, docs, papers, and any answer that needs fresh sources.";
+  return "Use pi-research for live web research, page fetching, source comparison, best practices, and cited summaries. Use it when facts may be current, uncertain, or need verification. If you do not know, search instead of guessing.";
 }
 
 function defaultMode(query) {
@@ -104,19 +104,19 @@ export default function webResearchExtension(pi) {
 
   pi.registerTool({
     name: "pi-research",
-    label: "Grounded Web Research",
-    description: "Live web search, page fetching, source ranking, and cited synthesis.",
-    promptSnippet: "Use for current facts, docs, source comparison, and cited answers.",
+    label: "Live Web Research",
+    description: "Fetch current web sources, rank evidence, and return cited answers.",
+    promptSnippet: "Use when the answer may be current, uncertain, or needs citations.",
     promptGuidelines: [
-      "Use pi-research when you need fresh sources, ranked results, or citations.",
-      "Prefer it over memory for facts that may have changed.",
-      "Use fast, deep, code, or academic mode based on the source type.",
+      "Use pi-research for current facts, official docs, best practices, repo questions, comparisons, and anything you need to verify.",
+      "If you are unsure, search instead of guessing.",
+      "Prefer fast, deep, code, or academic mode based on the source type.",
     ],
     parameters: Type.Object({
-      query: Type.String({ description: "Research question to answer from the web" }),
-      mode: Type.Optional(Type.Union([Type.Literal("fast"), Type.Literal("deep"), Type.Literal("code"), Type.Literal("academic")], { description: "Research mode", default: "fast" })),
-      force: Type.Optional(Type.Boolean({ description: "Bypass sufficiency gating and cached answers for this call" })),
-      isolate: Type.Optional(Type.Boolean({ description: "Run this query in isolation without session/query cache reuse" })),
+      query: Type.String({ description: "Question to answer from live web sources" }),
+      mode: Type.Optional(Type.Union([Type.Literal("fast"), Type.Literal("deep"), Type.Literal("code"), Type.Literal("academic")], { description: "Research strategy", default: "fast" })),
+      force: Type.Optional(Type.Boolean({ description: "Bypass cache and rerun live research for this call" })),
+      isolate: Type.Optional(Type.Boolean({ description: "Run without session or query cache reuse" })),
       options: Type.Optional(Type.Object({
         allowedSources: Type.Optional(Type.Array(Type.String())),
         maxTurns: Type.Optional(Type.Number()),
