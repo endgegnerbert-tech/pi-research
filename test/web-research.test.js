@@ -217,6 +217,50 @@ test("fetchPageSource uses Jina Reader proactively for known reader-friendly dom
   }
 });
 
+test("fetchPageSource escalates blocked pages through the adapter", async () => {
+  const previousFetch = globalThis.fetch;
+  const calls = [];
+
+  globalThis.fetch = async (url) => {
+    calls.push(String(url));
+    return {
+      status: 429,
+      url: String(url),
+      headers: { get: (name) => (String(name).toLowerCase() === "content-type" ? "text/html" : "") },
+      async text() {
+        return "<html><body>Too Many Requests</body></html>";
+      },
+    };
+  };
+
+  try {
+    const page = await fetchPageSource("https://blocked.example.com", undefined, {
+      pageTextLimit: 4000,
+      minPageText: 300,
+      useJinaFallback: true,
+      fetchAdapter: {
+        assessPageAttempt() {
+          return { weak: true, mode: "stealthy" };
+        },
+        async fetchWithScrapling(url, mode) {
+          assert.equal(url, "https://blocked.example.com");
+          assert.equal(mode, "stealthy");
+          return {
+            url,
+            body: "<html><title>Recovered</title><body>" + "Recovered content ".repeat(40) + "</body></html>",
+          };
+        },
+      },
+    });
+
+    assert.equal(page.title, "Recovered");
+    assert.match(page.text, /Recovered content/);
+    assert.ok(calls.length >= 1);
+  } finally {
+    globalThis.fetch = previousFetch;
+  }
+});
+
 test("runWebResearch in deep mode performs follow-up research and finalizes results", async () => {
   clearResearchMemory();
   const previousFetch = globalThis.fetch;
