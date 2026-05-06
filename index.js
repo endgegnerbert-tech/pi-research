@@ -7,7 +7,7 @@ import { runWebResearch } from "./lib/web-research.js";
 const RESEARCH_STATE = new Map();
 
 function buildWebResearchGuidance() {
-  return "Use pi-research for web search and research. Prefer fast mode for simple questions, deep mode for comparisons or ambiguous cases, and code/academic modes when source type matters.";
+  return "Use pi-research for live web research, page fetching, source comparison, and cited summaries. Prefer it for current facts, docs, papers, and any answer that needs fresh sources.";
 }
 
 function defaultMode(query) {
@@ -104,10 +104,14 @@ export default function webResearchExtension(pi) {
 
   pi.registerTool({
     name: "pi-research",
-    label: "Pi Research",
-    description: "Search and research the web.",
-    promptSnippet: "Use this for web research when needed.",
-    promptGuidelines: ["Use pi-research for search, source ranking, and summarization."],
+    label: "Grounded Web Research",
+    description: "Live web search, page fetching, source ranking, and cited synthesis.",
+    promptSnippet: "Use for current facts, docs, source comparison, and cited answers.",
+    promptGuidelines: [
+      "Use pi-research when you need fresh sources, ranked results, or citations.",
+      "Prefer it over memory for facts that may have changed.",
+      "Use fast, deep, code, or academic mode based on the source type.",
+    ],
     parameters: Type.Object({
       query: Type.String({ description: "Research question to answer from the web" }),
       mode: Type.Optional(Type.Union([Type.Literal("fast"), Type.Literal("deep"), Type.Literal("code"), Type.Literal("academic")], { description: "Research mode", default: "fast" })),
