@@ -33,3 +33,15 @@ test("assessPageAttempt keeps readable html on async mode", () => {
   assert.equal(result.weak, false);
   assert.equal(result.mode, "async");
 });
+
+test("assessPageAttempt does not mark normal github pages blocked", () => {
+  const result = assessPageAttempt({
+    status: 200,
+    body: "<html><body><main>" + "Project README content ".repeat(60) + "</main></body></html>",
+    contentType: "text/html",
+    url: "https://github.com/microsoft/TypeScript/blob/main/README.md",
+  });
+
+  assert.equal(result.blocked, false);
+  assert.equal(result.mode, "async");
+});
