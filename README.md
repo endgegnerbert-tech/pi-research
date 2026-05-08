@@ -218,4 +218,5 @@ npm install pi-research
 - Version: `1.1.1`
 - Entry point: `extensions/pi-research.ts`
 - License: MIT
+- Third-party notices: `THIRD_PARTY_NOTICES.md`
 - GitHub: `https://github.com/endgegnerbert-tech/pi-research`
