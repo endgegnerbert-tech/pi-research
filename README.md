@@ -215,7 +215,7 @@ npm install pi-research
 ## Release notes
 
 - Package name: `pi-research`
-- Version: `1.1.0`
+- Version: `1.1.1`
 - Entry point: `extensions/pi-research.ts`
 - License: MIT
 - GitHub: `https://github.com/endgegnerbert-tech/pi-research`

@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.1
+
+### Added
+- Scrapling-backed page fetch fallback with `AsyncFetcher`, `DynamicFetcher`, and `StealthyFetcher`.
+- Internal page fetch adapter with heuristic escalation for blocked, thin, JS-heavy, and anti-bot pages.
+- Benchmark assessment note for BrowseComp and FreshQA pilot runs.
+
+### Changed
+- `pi-research` tool metadata was refreshed for agent routing.
+- Tool guidance now emphasizes current facts, docs, best practices, comparisons, and verification.
+- Fetch heuristics were tuned to avoid false positives on normal GitHub pages.
+- `web-research` now keeps the fast HTTP path first and escalates only when needed.
+
 ## 1.1.0
 
 ### Added
