@@ -16,6 +16,7 @@
 
 ### Fixed
 - Global npm bin execution now works correctly with symlinked entrypoints.
+- npm install / global bin flow was verified in an isolated packed install.
 
 ## 1.1.1
 
