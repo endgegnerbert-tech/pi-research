@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.1.2
+
+### Added
+- MCP stdio server at `mcp/server.js` with CLI aliases `pi-research` and `unblind-mcp`.
+- Root-level `mcp-server.js` compatibility shim for older local configs.
+- README install examples for Pi extension, MCP-only usage, and global CLI usage.
+- Tests covering MCP initialize/list/call, package bin aliases, and shim re-export behavior.
+
+### Changed
+- Public tool name stays `pi-research` for both the Pi extension and the MCP server.
+- MCP server branding is `unblind-mcp` while the shared engine remains in `pi-research`.
+- Package metadata now exposes both CLI entry points via `bin`.
+- README now documents `node ./mcp/server.js`, `npm run --silent mcp`, and `npx -y pi-research`.
+
+### Fixed
+- Global npm bin execution now works correctly with symlinked entrypoints.
+
 ## 1.1.1
 
 ### Added

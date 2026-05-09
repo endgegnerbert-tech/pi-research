@@ -200,23 +200,90 @@ Run `npm run eval` to execute the eval harness.
 
 ## Install
 
-### For Pi
+### Pi Coding Agent — extension
+
+Existing Pi users should keep installing the main package:
 
 ```bash
 pi install npm:pi-research
 ```
 
-### For npm-based workflows
+This registers the Pi extension and keeps the public tool name `pi-research`.
+
+### MCP-only — any agent
+
+Run the MCP server directly from npm:
 
 ```bash
-npm install pi-research
+npx -y pi-research
 ```
+
+The MCP server identifies itself as `unblind-mcp`, but the tool it exposes is still named `pi-research`.
+
+### Global MCP install
+
+```bash
+npm install -g pi-research
+unblind-mcp
+```
+
+The global install also provides `pi-research` as a CLI alias for the same MCP server:
+
+```bash
+pi-research
+```
+
+### Local development
+
+```bash
+node ./mcp/server.js
+```
+
+Convenience script:
+
+```bash
+npm run --silent mcp
+```
+
+Example MCP config:
+
+```json
+{
+  "mcpServers": {
+    "unblind-mcp": {
+      "command": "npx",
+      "args": ["-y", "pi-research"]
+    }
+  }
+}
+```
+
+Local path config:
+
+```json
+{
+  "mcpServers": {
+    "unblind-mcp": {
+      "command": "node",
+      "args": ["/path/to/pi-research/mcp/server.js"]
+    }
+  }
+}
+```
+
+Compatibility note: `mcp-server.js` remains as a deprecated root-level shim for older local configs.
+
+### Future `unblind-mcp` package
+
+A separate npm package named `unblind-mcp` can be added later as a tiny wrapper around `pi-research`. It should depend on `pi-research` and start the same MCP server, not duplicate the engine.
 
 ## Release notes
 
 - Package name: `pi-research`
-- Version: `1.1.1`
+- Version: `1.1.2`
 - Entry point: `extensions/pi-research.ts`
+- MCP entry point: `mcp/server.js`
+- MCP compatibility shim: `mcp-server.js`
 - License: MIT
 - Third-party notices: `THIRD_PARTY_NOTICES.md`
 - GitHub: `https://github.com/endgegnerbert-tech/pi-research`

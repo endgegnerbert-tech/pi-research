@@ -6,10 +6,16 @@
   "description": "Pi extension for web research.",
   "license": "MIT",
   "main": "./index.js",
+  "bin": {
+    "pi-research": "./mcp/server.js",
+    "unblind-mcp": "./mcp/server.js"
+  },
   "files": [
     "extensions",
     "index.js",
     "lib",
+    "mcp",
+    "mcp-server.js",
     "README.md",
     "THIRD_PARTY_NOTICES.md",
     "package.json"
@@ -27,7 +33,8 @@
   ],
   "scripts": {
     "test": "node --test",
-    "eval": "node --test test/eval-runner.test.js"
+    "eval": "node --test test/eval-runner.test.js",
+    "mcp": "node ./mcp/server.js"
   },
   "dependencies": {
     "@mariozechner/pi-ai": "*",
