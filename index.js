@@ -2,6 +2,7 @@ import { Type } from "typebox";
 
 import { compactResearchPayload, classifyQueryIntent, inferOfficialDocsSite } from "./lib/research.js";
 import { clearResearchMemory, hashResearchQuery, setResearchMemory, shouldSkipResearch } from "./lib/research-memory.js";
+import { logResearchEvent } from "./lib/local-logger.js";
 import { runWebResearch } from "./lib/web-research.js";
 
 const RESEARCH_STATE = new Map();
@@ -61,11 +62,17 @@ export default function webResearchExtension(pi) {
   pi.on("before_agent_start", async (event) => {
     RESEARCH_STATE.clear();
     clearResearchMemory();
+    await logResearchEvent("agent_start", {
+      systemPrompt: event.systemPrompt,
+      guidance: buildWebResearchGuidance(),
+    });
     return { systemPrompt: `${event.systemPrompt}\n\n${buildWebResearchGuidance()}` };
   });
 
   pi.on("tool_call", async (event) => {
     if (event.toolName !== "pi-research") return;
+    event.input ||= {};
+    const originalInput = { ...event.input };
     if (!event.input.mode) event.input.mode = defaultMode(event.input.query || "");
 
     const queryHash = hashResearchQuery(event.input.query || "");
@@ -73,9 +80,26 @@ export default function webResearchExtension(pi) {
     const mode = event.input.mode;
     const isolate = Boolean(event.input.isolate || process.env.RESEARCH_ISOLATE === "1");
     const force = Boolean(event.input.force);
+    let blocked = false;
+    let reason = "";
 
     if (shouldSkipResearch({ queryHash, lastHash: state.lastHash, lastWasSufficient: state.lastSufficient, force, isolate })) {
-      return { block: true, reason: "Recent pi-research result was already sufficient for this exact query." };
+      blocked = true;
+      reason = "Recent pi-research result was already sufficient for this exact query.";
+      await logResearchEvent("tool_call", {
+        originalInput,
+        finalInput: { ...event.input },
+        queryHash,
+        blocked,
+        reason,
+        state: {
+          count: state.count,
+          lastHash: state.lastHash,
+          lastSufficient: state.lastSufficient,
+          fastRecoveryAllowed: state.fastRecoveryAllowed,
+        },
+      });
+      return { block: true, reason };
     }
 
     if (mode === "fast" && state.count === 1 && state.fastRecoveryAllowed && !force && !isolate) {
@@ -85,19 +109,39 @@ export default function webResearchExtension(pi) {
 
     state.count += 1;
     state.lastHash = queryHash;
+    await logResearchEvent("tool_call", {
+      originalInput,
+      finalInput: { ...event.input },
+      queryHash,
+      blocked,
+      state: {
+        count: state.count,
+        lastHash: state.lastHash,
+        lastSufficient: state.lastSufficient,
+        fastRecoveryAllowed: state.fastRecoveryAllowed,
+      },
+    });
   });
 
   pi.on("tool_result", async (event) => {
-    if (event.toolName === "pi-research" && !event.isError && event.details?.ok) {
-      const queryHash = hashResearchQuery(event.input?.query || "");
-      const state = getState(queryHash);
-      state.lastHash = queryHash;
-      state.lastSufficient = Boolean(event.details.sufficient);
-      const query = event.input?.query || "";
-      state.fastRecoveryAllowed = !event.details.sufficient
-        && !event.details.authoritativeSourcesFound
-        && ["best_practice", "temporal", "definition"].includes(classifyQueryIntent(query || ""));
-      setResearchMemory(`last:${queryHash}`, event.details);
+    if (event.toolName === "pi-research") {
+      if (!event.isError && event.details?.ok) {
+        const queryHash = hashResearchQuery(event.input?.query || "");
+        const state = getState(queryHash);
+        state.lastHash = queryHash;
+        state.lastSufficient = Boolean(event.details.sufficient);
+        const query = event.input?.query || "";
+        state.fastRecoveryAllowed = !event.details.sufficient
+          && !event.details.authoritativeSourcesFound
+          && ["best_practice", "temporal", "definition"].includes(classifyQueryIntent(query || ""));
+        setResearchMemory(`last:${queryHash}`, event.details);
+      }
+      await logResearchEvent("tool_result", {
+        toolName: event.toolName,
+        isError: event.isError,
+        input: event.input,
+        details: event.details,
+      });
     }
     return compactWebResearchToolResult(event) || undefined;
   });
