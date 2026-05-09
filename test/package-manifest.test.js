@@ -8,6 +8,6 @@ test("package manifest exposes the pi extension entrypoint", () => {
 });
 
 test("package manifest exposes MCP CLI aliases", () => {
-  assert.equal(pkg.bin["pi-research"], "./mcp/server.js");
-  assert.equal(pkg.bin["unblind-mcp"], "./mcp/server.js");
+  assert.equal(pkg.bin["pi-research"], "./pi-research.js");
+  assert.equal(pkg.bin["unblind-mcp"], "./unblind-mcp.js");
 });

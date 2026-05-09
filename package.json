@@ -1,21 +1,24 @@
 {
   "name": "pi-research",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": false,
   "type": "module",
   "description": "Pi extension for web research.",
   "license": "MIT",
   "main": "./index.js",
   "bin": {
-    "pi-research": "./mcp/server.js",
-    "unblind-mcp": "./mcp/server.js"
+    "pi-research": "./pi-research.js",
+    "unblind-mcp": "./unblind-mcp.js"
   },
   "files": [
+    "bin",
     "extensions",
     "index.js",
     "lib",
     "mcp",
     "mcp-server.js",
+    "pi-research.js",
+    "unblind-mcp.js",
     "README.md",
     "THIRD_PARTY_NOTICES.md",
     "package.json"

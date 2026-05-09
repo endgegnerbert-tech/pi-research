@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.2.1
+
+### Added
+- Root-level CLI wrappers `pi-research.js` and `unblind-mcp.js` for npm-publish-safe bin targets.
+- README install examples for `npm i pi-research`, MCP-only usage, and global CLI usage.
+- Tests covering MCP initialize/list/call, package bin aliases, and shim re-export behavior.
+
+### Changed
+- Package metadata now exposes both CLI entry points via `bin`.
+- README now documents `npm i pi-research`, `node ./mcp/server.js`, `npm run --silent mcp`, and `npx -y pi-research`.
+- Public tool name stays `pi-research` for both the Pi extension and the MCP server.
+- MCP server branding stays `unblind-mcp` while the shared engine remains in `pi-research`.
+
+### Fixed
+- Global npm bin execution works correctly with publish-safe wrapper entrypoints.
+- npm install / global bin flow was verified in an isolated packed install.
+- npm publish no longer strips the CLI bin targets.
+
 ## 1.1.2
 
 ### Added

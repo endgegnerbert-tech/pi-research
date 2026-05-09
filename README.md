@@ -210,6 +210,14 @@ pi install npm:pi-research
 
 This registers the Pi extension and keeps the public tool name `pi-research`.
 
+### npm install
+
+```bash
+npm i pi-research
+```
+
+This is the package install command that npm shows on the package page.
+
 ### MCP-only — any agent
 
 Run the MCP server directly from npm:
@@ -280,7 +288,7 @@ A separate npm package named `unblind-mcp` can be added later as a tiny wrapper 
 ## Release notes
 
 - Package name: `pi-research`
-- Version: `1.1.2`
+- Version: `1.2.1`
 - Entry point: `extensions/pi-research.ts`
 - MCP entry point: `mcp/server.js`
 - MCP compatibility shim: `mcp-server.js`
