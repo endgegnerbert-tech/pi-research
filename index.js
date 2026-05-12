@@ -63,7 +63,7 @@ export default function webResearchExtension(pi) {
     RESEARCH_STATE.clear();
     clearResearchMemory();
     await logResearchEvent("agent_start", {
-      systemPrompt: event.systemPrompt,
+      systemPromptLength: String(event.systemPrompt || "").length,
       guidance: buildWebResearchGuidance(),
     });
     return { systemPrompt: `${event.systemPrompt}\n\n${buildWebResearchGuidance()}` };

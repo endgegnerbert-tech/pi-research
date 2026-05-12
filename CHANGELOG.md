@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.3.0
+
+### Added
+- Retrieval policy document at `docs/policies/pi-research-retrieval-policy.md` to freeze authority, weak-page, and follow-up rules.
+- `lib/research-policy.js` with shared authority matrix, weak/blocked thresholds, and deterministic follow-up query builders.
+- Regression tests for blocked placeholders, vendor research authority, ResearchGate handling, and search-oriented follow-up queries.
+- Deterministic eval cases for weak-page detection, follow-up behavior, and authority checks across `web`, `github`, `security`, and `papers`.
+
+### Changed
+- Follow-up queries now stay search-oriented and stop using meta-question phrasing like `Which authoritative source...`.
+- Vendor research hosts such as `research.ibm.com` and `research.google` are now classified above generic `other` pages for relevant technical queries.
+- Eval runner now reports behavior-based check coverage instead of only counting domain labels.
+- Agent-start analytics now log prompt length instead of the full system prompt body.
+
+### Fixed
+- Repeated zero-result follow-up loops are now cut short instead of wasting turns on the same dead-end query shape.
+- Blocked placeholders such as `Access denied`, `Temporarily Unavailable`, and Cloudflare challenge pages are filtered earlier and no longer treated like normal evidence.
+- Unsupported content types such as PDFs now try a targeted fallback path before being dropped as unreadable.
+- Cached blocked/placeholder pages are revalidated before reuse.
+
 ## 1.2.1
 
 ### Added
