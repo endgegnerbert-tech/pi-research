@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.1
+
+### Fixed
+- npm `bin` metadata now points to `bin/pi-research.js` and `bin/unblind-mcp.js` so publish no longer warns and strips invalid entries.
+- CLI wrapper files are now aligned with npm publish expectations for the next release.
+
 ## 1.3.0
 
 ### Added
