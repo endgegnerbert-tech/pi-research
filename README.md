@@ -3,7 +3,7 @@
 ![pi-research logo](docs/assets/pi-research-logo.png)
 
 [![npm version](https://img.shields.io/npm/v/pi-research?color=blue)](https://www.npmjs.com/package/pi-research)
-[![tests](https://img.shields.io/badge/tests-56%2F56-brightgreen)](https://github.com/endgegnerbert-tech/pi-research)
+[![tests](https://img.shields.io/badge/tests-90%2F90-brightgreen)](https://github.com/endgegnerbert-tech/pi-research)
 [![Pi package](https://img.shields.io/badge/pi-package-blueviolet)](https://pi.ai)
 
 `pi-research` is a Pi extension for grounded web research.
@@ -38,15 +38,25 @@ When agents answer well, they usually do three things:
 - scores and deduplicates sources
 - prefers official docs, READMEs, and papers when relevant
 - follows up when the first pass is not enough
+- caches repeated research and expensive page fetches
+- escalates blocked, JS-heavy, or thin pages through Scrapling when needed
 - extracts code blocks for code-focused questions
 - supports local files as additional sources
+- optionally uses a local BitNet/`bitnet.cpp` JSON planner before heuristic fallback
 - returns structured results with citations, confidence, conflicts, and gaps
+
+## Current implementation status
+
+- **Phase 1 — speed and caching:** implemented persistent research cache reuse, faster fast-mode stopping, and longer TTLs for expensive fetched pages.
+- **Phase 2 — Scrapling fetch fallback:** implemented a reusable Python daemon, async Scrapling sessions, runtime preflight diagnostics, proxy rotation payloads, and idle shutdown.
+- **Phase 3 — local BitNet planning:** implemented an opt-in local JSON planner/router with one-command setup and measured fallback behavior.
 
 ## What it is not
 
 - not a browser interaction tool
 - not an offline knowledge base
 - not a replacement for page navigation
+- not faster or more accurate by default with local BitNet planning enabled; current local benchmarks keep heuristics as the safe default
 
 ## Quick start
 
@@ -115,13 +125,13 @@ Run one setup command to install the official `bitnet.cpp` runner, download the 
 npx pi-research setup-local-slm
 ```
 
-Then `pi-research` can route domains and plan search queries locally as JSON before heuristic fallback. On macOS the setup uses Homebrew for missing build dependencies such as Python 3.11 and CMake. Check the setup with:
+Then `pi-research` can route domains and plan search queries locally as JSON before heuristic fallback. On macOS the setup uses Homebrew for missing build dependencies such as Python 3.11 and CMake. The local planner is intentionally opt-in: a real BitNet benchmark showed the existing heuristic router was more accurate and much faster for the current eval slice. Check the setup with:
 
 ```bash
 npx pi-research doctor-local-slm
 ```
 
-Overrides: `PI_RESEARCH_LOCAL_SLM=0` disables local planning; `PI_RESEARCH_GGUF_MODEL` and `PI_RESEARCH_LLAMA_CLI` override the configured model/runner.
+Overrides: `PI_RESEARCH_LOCAL_SLM=0` disables local planning; `PI_RESEARCH_GGUF_MODEL`, `PI_RESEARCH_LLAMA_CLI`, and `PI_RESEARCH_CONFIG_PATH` override the configured model, runner, or config path.
 
 ## Example calls
 
@@ -304,7 +314,7 @@ A separate npm package named `unblind-mcp` can be added later as a tiny wrapper 
 ## Release notes
 
 - Package name: `pi-research`
-- Version: `1.2.1`
+- Version: `1.3.1`
 - Entry point: `extensions/pi-research.ts`
 - MCP entry point: `mcp/server.js`
 - MCP compatibility shim: `mcp-server.js`
