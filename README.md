@@ -107,6 +107,10 @@ The tool returns structured data including:
 - `options.format` — output format: `markdown`, `json`, `table`, or `latex`
 - `options.deepResearchConfig` — depth/breadth/concurrency tuning for deeper runs
 
+## Optional local query planner
+
+Set `PI_RESEARCH_LOCAL_SLM=1` plus `PI_RESEARCH_GGUF_MODEL=/path/to/model.gguf` to let a local llama.cpp-compatible model route domains and plan search queries as JSON before heuristic fallback. Override the runner with `PI_RESEARCH_LLAMA_CLI` when `llama-cli` is not on `PATH`.
+
 ## Example calls
 
 ### Fast mode

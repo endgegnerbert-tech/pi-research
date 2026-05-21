@@ -5,6 +5,7 @@ import webResearchExtension from "../index.js";
 import { buildQueries, fetchPageSource, getResearchConfig, resolveResearchModel, runWebResearch } from "../lib/web-research.js";
 import { compactResearchPayload, evaluateSufficiency, prioritizeSourceEntries, scoreSourceEntry } from "../lib/research.js";
 import { clearResearchMemory, normalizeResearchQuery, readCachedResult, shouldSkipResearch, writeCachedResult } from "../lib/research-memory.js";
+import { setLocalSlmRunnerForTests } from "../lib/local-slm.js";
 import { createResearchResult } from "../lib/types.js";
 
 test("webResearchExtension registers a pi-research tool", () => {
@@ -129,6 +130,22 @@ test("buildQueries uses heuristic fast planning without a model call", async () 
   };
 
   assert.deepEqual(await buildQueries("was ist Jina Reader?", "fast", ctx, undefined), ["Jina Reader"]);
+});
+
+test("buildQueries can use local SLM query plans before heuristic fallback", async () => {
+  setLocalSlmRunnerForTests(async ({ query, mode }) => ({
+    intent: mode,
+    queries: [`${query} official docs`, `${query} GitHub README`],
+  }));
+
+  try {
+    assert.deepEqual(await buildQueries("playwright best practices", "fast", {}, undefined), [
+      "playwright best practices official docs",
+      "playwright best practices GitHub README",
+    ]);
+  } finally {
+    setLocalSlmRunnerForTests(null);
+  }
 });
 
 test("buildQueries can use model-planned subqueries only in deep mode", async () => {
