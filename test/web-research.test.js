@@ -26,6 +26,8 @@ test("getResearchConfig supports code and academic profiles", () => {
   assert.equal(getResearchConfig("academic").mode, "academic");
   assert.equal(getResearchConfig("deep").maxTurns, 2);
   assert.equal(getResearchConfig("academic").searchProvider, "academic");
+  assert.equal(getResearchConfig("fast").stealthTimeoutMs, 30000);
+  assert.equal(getResearchConfig("deep").stealthTimeoutMs, 40000);
 });
 
 test("getResearchConfig merges deep research options", () => {
@@ -261,6 +263,130 @@ test("fetchPageSource escalates blocked pages through the adapter", async () => 
   }
 });
 
+test("fetchPageSource keeps scrapling-assisted pages cached beyond default page ttl", async () => {
+  const previousFetch = globalThis.fetch;
+  const previousNow = Date.now;
+  let now = 1_000;
+  let fetchCalls = 0;
+
+  Date.now = () => now;
+  globalThis.fetch = async (url) => {
+    fetchCalls += 1;
+    return {
+      status: 429,
+      url: String(url),
+      headers: { get: () => "text/html" },
+      async text() {
+        return "<html><body>Too Many Requests</body></html>";
+      },
+    };
+  };
+
+  try {
+    const config = {
+      pageTextLimit: 4000,
+      minPageText: 300,
+      useJinaFallback: true,
+      fetchAdapter: {
+        assessPageAttempt() {
+          return { weak: true, blocked: true, mode: "stealthy" };
+        },
+        async fetchWithScrapling(url) {
+          return {
+            url,
+            body: "<html><title>Recovered</title><body>" + "Recovered content ".repeat(40) + "</body></html>",
+          };
+        },
+      },
+    };
+
+    const first = await fetchPageSource("https://blocked-expensive.example.com", undefined, config);
+    now += (31 * 60 * 1000);
+    const second = await fetchPageSource("https://blocked-expensive.example.com", undefined, config);
+
+    assert.equal(first.title, "Recovered");
+    assert.equal(second.title, "Recovered");
+    assert.equal(fetchCalls, 1);
+  } finally {
+    Date.now = previousNow;
+    globalThis.fetch = previousFetch;
+  }
+});
+
+test("runWebResearch fast mode aborts extra fetches after enough usable pages", async () => {
+  clearResearchMemory();
+  const previousFetch = globalThis.fetch;
+  let abortedFetches = 0;
+
+  function ddgHtml(results) {
+    return results.map(({ url, title, snippet }) => `
+      <div class="result results_links">
+        <h2 class="result__title">
+          <a class="result__a" href="//duckduckgo.com/l/?uddg=${encodeURIComponent(url)}&amp;rut=abc">${title}</a>
+        </h2>
+        <a class="result__snippet">${snippet}</a>
+      </div>
+    `).join("\n");
+  }
+
+  globalThis.fetch = async (url, options = {}) => {
+    const text = String(url);
+    if (text.includes("duckduckgo.com/html")) {
+      return {
+        headers: { get: () => "text/html" },
+        async text() {
+          return ddgHtml([
+            { url: "https://fast.example.com/1", title: "Fast 1", snippet: "topic guidance alpha" },
+            { url: "https://fast.example.com/2", title: "Fast 2", snippet: "topic guidance beta" },
+            { url: "https://fast.example.com/3", title: "Fast 3", snippet: "topic guidance gamma" },
+            { url: "https://slow.example.com/4", title: "Slow 4", snippet: "topic guidance" },
+            { url: "https://slow.example.com/5", title: "Slow 5", snippet: "topic guidance" },
+            { url: "https://slow.example.com/6", title: "Slow 6", snippet: "topic guidance" },
+          ]);
+        },
+      };
+    }
+
+    if (text.includes("slow.example.com")) {
+      return await new Promise((resolve, reject) => {
+        const abort = () => {
+          abortedFetches += 1;
+          const error = new Error("aborted");
+          error.name = "AbortError";
+          reject(error);
+        };
+        if (options.signal?.aborted) return abort();
+        options.signal?.addEventListener("abort", abort, { once: true });
+      });
+    }
+
+    return {
+      status: 200,
+      url: text,
+      headers: { get: () => "text/html" },
+      async text() {
+        return `<html><title>${text}</title><body>${(`topic guidance ${text} `).repeat(80)}</body></html>`;
+      },
+    };
+  };
+
+  try {
+    const result = await runWebResearch(
+      "topic guidance",
+      { model: null, modelRegistry: { async getApiKeyAndHeaders() { return { ok: false }; } } },
+      undefined,
+      undefined,
+      { mode: "fast", isolate: true }
+    );
+
+    assert.equal(result.ok, true);
+    assert.ok(abortedFetches >= 1);
+    assert.ok(result.pagesRead >= 3);
+  } finally {
+    globalThis.fetch = previousFetch;
+  }
+});
+
 test("runWebResearch in deep mode performs follow-up research and finalizes results", async () => {
   clearResearchMemory();
   const previousFetch = globalThis.fetch;
@@ -285,8 +411,8 @@ test("runWebResearch in deep mode performs follow-up research and finalizes resu
         headers: { get: () => "text/html" },
         async text() {
           return ddgHtml(ddgCalls.length <= 2 ? [
-            { url: "https://blog.example.com/a", title: "Blog A", snippet: "topic analysis" },
-            { url: "https://news.example.com/b", title: "News B", snippet: "topic context" },
+            { url: "https://blog-source.example.net/a", title: "Blog A", snippet: "topic analysis" },
+            { url: "https://news-source.example.org/b", title: "News B", snippet: "topic context" },
           ] : [
             { url: "https://example.com/docs/topic", title: "Official Docs", snippet: "official docs" },
           ]);
@@ -316,6 +442,7 @@ test("runWebResearch in deep mode performs follow-up research and finalizes resu
     assert.equal(result.followupRounds >= 1, true);
     assert.equal(result.conflictDetected, false);
     assert.match(result.followupQuery, /official docs/);
+    assert.match(result.followupQuery, /-site:example\.com/);
     assert.ok(ddgCalls.length >= 2);
     assert.ok(Array.isArray(result.citations));
     assert.ok(result.pagesRead > 0);

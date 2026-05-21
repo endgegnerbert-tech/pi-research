@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { assessPageAttempt } from "../lib/page-fetch-adapter.js";
-import { pageQualitySignals } from "../lib/research-policy.js";
+import { isUsableContent, pageQualitySignals } from "../lib/research-policy.js";
 import { evaluateSufficiency, scoreSourceEntry } from "../lib/research.js";
 
 test("blocked placeholders are detected early", () => {
@@ -27,6 +27,27 @@ test("page quality does not demote a page on text length alone", () => {
 
   assert.equal(quality.blocked, false);
   assert.equal(quality.weak, false);
+});
+
+
+test("isUsableContent accepts readable non-placeholder pages", () => {
+  assert.equal(isUsableContent({
+    title: "Docs",
+    url: "https://example.com/docs",
+    text: "Useful content ".repeat(40),
+    contentType: "text/html",
+    fetchStatus: 200,
+  }, { minPageText: 300, query: "useful content" }), true);
+});
+
+test("isUsableContent rejects placeholder and weak pages", () => {
+  assert.equal(isUsableContent({
+    title: "Attention Required! | Cloudflare",
+    url: "https://blocked.example.com",
+    text: "Access denied. Verify you are human.",
+    contentType: "text/html",
+    fetchStatus: 200,
+  }, { minPageText: 300, query: "blocked page" }), false);
 });
 
 test("vendor research hosts classify above generic other", () => {
