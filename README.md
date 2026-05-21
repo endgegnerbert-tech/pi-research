@@ -109,7 +109,19 @@ The tool returns structured data including:
 
 ## Optional local query planner
 
-Set `PI_RESEARCH_LOCAL_SLM=1` plus `PI_RESEARCH_GGUF_MODEL=/path/to/model.gguf` to let a local llama.cpp-compatible model route domains and plan search queries as JSON before heuristic fallback. Override the runner with `PI_RESEARCH_LLAMA_CLI` when `llama-cli` is not on `PATH`.
+Run one setup command to install the official `bitnet.cpp` runner, download the default Microsoft BitNet GGUF model, build the local runner, and write local config:
+
+```bash
+npx pi-research setup-local-slm
+```
+
+Then `pi-research` can route domains and plan search queries locally as JSON before heuristic fallback. On macOS the setup uses Homebrew for missing build dependencies such as Python 3.11 and CMake. Check the setup with:
+
+```bash
+npx pi-research doctor-local-slm
+```
+
+Overrides: `PI_RESEARCH_LOCAL_SLM=0` disables local planning; `PI_RESEARCH_GGUF_MODEL` and `PI_RESEARCH_LLAMA_CLI` override the configured model/runner.
 
 ## Example calls
 

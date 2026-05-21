@@ -1,4 +1,4 @@
-import test from "node:test";
+import test, { after } from "node:test";
 import assert from "node:assert/strict";
 
 import webResearchExtension from "../index.js";
@@ -7,6 +7,13 @@ import { compactResearchPayload, evaluateSufficiency, prioritizeSourceEntries, s
 import { clearResearchMemory, normalizeResearchQuery, readCachedResult, shouldSkipResearch, writeCachedResult } from "../lib/research-memory.js";
 import { setLocalSlmRunnerForTests } from "../lib/local-slm.js";
 import { createResearchResult } from "../lib/types.js";
+
+const previousLocalSlm = process.env.PI_RESEARCH_LOCAL_SLM;
+process.env.PI_RESEARCH_LOCAL_SLM = "0";
+after(() => {
+  if (previousLocalSlm === undefined) delete process.env.PI_RESEARCH_LOCAL_SLM;
+  else process.env.PI_RESEARCH_LOCAL_SLM = previousLocalSlm;
+});
 
 test("webResearchExtension registers a pi-research tool", () => {
   clearResearchMemory();
