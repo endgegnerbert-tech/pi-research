@@ -17,7 +17,7 @@ import {
 const TEST_ENV = {
   PI_RESEARCH_TINY_ROUTER: "1",
   PI_RESEARCH_TINY_ROUTER_FOLLOWUP: "1",
-  PI_RESEARCH_TINY_ROUTER_MODEL: ".cache/models/pi-research-router",
+  PI_RESEARCH_TINY_ROUTER_MODEL: "ml/models",
   PI_RESEARCH_TINY_ROUTER_PYTHON: ".venv-router/bin/python",
   PI_RESEARCH_TINY_ROUTER_TIMEOUT_MS: "200",
 };
