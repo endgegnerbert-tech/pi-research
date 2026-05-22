@@ -1,19 +1,19 @@
 # 06 — BitNet / JSON Deprecation Path
 
-This is optional and must happen after a tiny-router slice ships safely.
+Status: completed.
 
-## Current BitNet/local-SLM files
+## Removed BitNet/local-SLM files
 
 - `lib/local-slm.js`
 - `lib/local-slm-setup.js`
 - `test/local-slm.test.js`
-- README and CHANGELOG references to Phase 3 local BitNet planning
+- README and CLI references to local BitNet setup/doctor flows
 
-## Why not remove immediately
+## Why removal is now safe
 
-- It is a working fallback.
-- Tests currently cover it.
-- Removing it while tiny-router is unproven increases risk.
+- Domain tiny-router passed gold eval and latency checks.
+- Query planning is deterministic without local JSON generation.
+- Tests no longer require the old local-SLM path.
 
 ## Deprecation order
 
@@ -62,10 +62,10 @@ Options:
 
 ## Removal acceptance
 
-BitNet/JSON can be removed only if:
+Completed:
 
 - no test requires it,
 - tiny-router covers domain use-case,
 - deterministic planner covers query planning use-case,
 - README no longer promises BitNet setup,
-- package remains installable without BitNet/Python setup.
+- package remains installable without BitNet-specific setup.

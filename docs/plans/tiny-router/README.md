@@ -1,6 +1,6 @@
 # Tiny Router / Structured TRM Plan
 
-Status: design plan, no implementation yet.
+Status: implemented for domain routing plus conservative structured hooks; follow-up TRM work remains optional.
 
 Goal: replace the slow BitNet/JSON local-planner idea with small local decision modules. Use the right model per decision:
 
@@ -25,11 +25,11 @@ TRM should not be used as a generic classifier. Domain routing is not recursive.
 
 ## First ship target
 
-Ship only the safest first slice:
+Shipped first slice:
 
 ```text
-Domain routing: Model2Vec + simple classifier
+Domain routing: calibrated Model2Vec + classifier
 Fallback: current classifyQuestionDomain()
 ```
 
-TRM is a parallel experiment for structured evidence reasoning, not a blocker for the domain-router ship.
+Structured conflict/sufficiency hooks are feature-flagged and conservative. TRM remains optional, not a blocker for the shipped domain router.

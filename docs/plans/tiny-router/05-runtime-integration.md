@@ -2,7 +2,7 @@
 
 ## New runtime module
 
-Create later:
+Implemented at:
 
 ```text
 lib/tiny-router.js
@@ -56,8 +56,8 @@ else:
 
 Legacy local SLM:
 
-- Keep only if explicitly enabled.
-- Do not call it before fast local classifier.
+- Removed.
+- Runtime now uses tiny-router plus deterministic heuristic fallback only.
 
 ## Structured TRM integration later
 

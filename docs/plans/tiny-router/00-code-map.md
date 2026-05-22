@@ -2,24 +2,18 @@
 
 This plan is based on the current code paths in `lib/`.
 
-## Existing local model path
+## Former local model path
 
-Files:
+Files removed during Phase 6:
 
 - `lib/local-slm.js`
 - `lib/local-slm-setup.js`
 - `test/local-slm.test.js`
 
-Current behavior:
+Result:
 
-- Uses BitNet/llama-style JSON prompting for query planning and domain classification.
-- Parses model text output as JSON.
-- Good as legacy fallback, but slow and fragile for deterministic routing.
-
-Decision:
-
-- Do not extend this path for TRM.
-- Add a separate tiny-router module.
+- The older BitNet/JSON prompt path is gone.
+- Tiny-router is the only local model path now.
 
 ## Domain routing point
 
@@ -36,15 +30,8 @@ async function resolveQuestionDomain(query, signal)
 Current flow:
 
 ```text
-classifyDomainWithLocalSlm(query) || classifyQuestionDomain(query)
-```
-
-New flow later:
-
-```text
 tinyRouter.classifyDomain(query) high confidence
   || classifyQuestionDomain(query)
-  || optional legacy local SLM
 ```
 
 Best model:

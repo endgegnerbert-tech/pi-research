@@ -1,16 +1,9 @@
-import test, { after } from "node:test";
+import test from "node:test";
 import assert from "node:assert/strict";
 
 import { buildQueries } from "../lib/web-research.js";
 import { factCheckAnswer } from "../lib/research.js";
 import { planResearch } from "../lib/planner.js";
-
-const previousLocalSlm = process.env.PI_RESEARCH_LOCAL_SLM;
-process.env.PI_RESEARCH_LOCAL_SLM = "0";
-after(() => {
-  if (previousLocalSlm === undefined) delete process.env.PI_RESEARCH_LOCAL_SLM;
-  else process.env.PI_RESEARCH_LOCAL_SLM = previousLocalSlm;
-});
 
 test("code mode query planning adds docs and github hints", async () => {
   const queries = await buildQueries("DuckDB window functions", "code", undefined, undefined);

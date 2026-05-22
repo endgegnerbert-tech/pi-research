@@ -42,21 +42,29 @@ When agents answer well, they usually do three things:
 - escalates blocked, JS-heavy, or thin pages through Scrapling when needed
 - extracts code blocks for code-focused questions
 - supports local files as additional sources
-- optionally uses a local BitNet/`bitnet.cpp` JSON planner before heuristic fallback
+- optionally uses a tiny local router for conservative domain/follow-up decisions
 - returns structured results with citations, confidence, conflicts, and gaps
 
 ## Current implementation status
 
-- **Phase 1 — speed and caching:** implemented persistent research cache reuse, faster fast-mode stopping, and longer TTLs for expensive fetched pages.
-- **Phase 2 — Scrapling fetch fallback:** implemented a reusable Python daemon, async Scrapling sessions, runtime preflight diagnostics, proxy rotation payloads, and idle shutdown.
-- **Phase 3 — local BitNet planning:** implemented an opt-in local JSON planner/router with one-command setup and measured fallback behavior.
+- **Phase 1 — speed and caching:** persistent research cache reuse, faster fast-mode stopping, and longer TTLs for expensive fetched pages.
+- **Phase 2 — Scrapling fetch fallback:** reusable Python daemon, async Scrapling sessions, proxy rotation payloads, and idle shutdown.
+- **Phase 3 — Hybrid Architecture (Tiny-Router):** highly optimized Node.js-to-Python daemon IPC using structured feature extraction, Model2Vec, and lightweight ML models (SVC/Logistic Regression).
+- **Phase 4 — Best Practice Refactoring:** centralized retrieval policies, deduplicated ML pattern matching, and strict enforcement of model decisions (like `stop` follow-ups) over legacy heuristics.
+
+## Next steps & Future Vision
+
+- **LLM Data Augmentation (Weak Supervision):** Generate thousands of synthetic queries for underconfident domains (e.g., `papers`, `package-registry`) to boost the Domain Router's accuracy >95% without manual labeling.
+- **Active Learning Telemetry Loop:** Cluster low-confidence predictions stored in the local cache/logs and feed them into a weakly-supervised retraining pipeline to let the system "self-heal" its domain routing.
+- **Cross-Encoder for Conflict Detection:** Replace the current structured Logistic Regression for conflict resolution with a small Cross-Encoder (e.g., MiniLM with Natural Language Inference fine-tuning) to detect true semantic contradiction across differing texts (e.g., "Node 20 is stable" vs "Node 20 is broken").
+- **Contrastive Fine-Tuning (Model2Vec):** Shift from out-of-the-box embeddings to SimCSE-style contrastive learning, tuning the vector space directly on internal research queries.
 
 ## What it is not
 
 - not a browser interaction tool
 - not an offline knowledge base
 - not a replacement for page navigation
-- not faster or more accurate by default with local BitNet planning enabled; current local benchmarks keep heuristics as the safe default
+- not a free-text local planner or generic offline LLM wrapper
 
 ## Quick start
 
@@ -117,21 +125,23 @@ The tool returns structured data including:
 - `options.format` — output format: `markdown`, `json`, `table`, or `latex`
 - `options.deepResearchConfig` — depth/breadth/concurrency tuning for deeper runs
 
-## Optional local query planner
+## Optional tiny router
 
-Run one setup command to install the official `bitnet.cpp` runner, download the default Microsoft BitNet GGUF model, build the local runner, and write local config:
+The runtime can use a small local router for conservative domain and follow-up decisions.
 
-```bash
-npx pi-research setup-local-slm
-```
-
-Then `pi-research` can route domains and plan search queries locally as JSON before heuristic fallback. On macOS the setup uses Homebrew for missing build dependencies such as Python 3.11 and CMake. The local planner is intentionally opt-in: a real BitNet benchmark showed the existing heuristic router was more accurate and much faster for the current eval slice. Check the setup with:
+Feature flags:
 
 ```bash
-npx pi-research doctor-local-slm
+PI_RESEARCH_TINY_ROUTER=1
+PI_RESEARCH_TINY_ROUTER_MODEL=/path/to/pi-research-router
+PI_RESEARCH_TINY_ROUTER_TIMEOUT_MS=50
+PI_RESEARCH_TINY_ROUTER_DOMAIN=1
+PI_RESEARCH_TINY_ROUTER_FOLLOWUP=0
+PI_RESEARCH_TINY_ROUTER_CONFLICT=0
+PI_RESEARCH_TINY_ROUTER_SUFFICIENCY=0
 ```
 
-Overrides: `PI_RESEARCH_LOCAL_SLM=0` disables local planning; `PI_RESEARCH_GGUF_MODEL`, `PI_RESEARCH_LLAMA_CLI`, and `PI_RESEARCH_CONFIG_PATH` override the configured model, runner, or config path.
+Recommended default: enable only the domain router first, then turn on structured tasks only after reviewing metrics.
 
 ## Example calls
 
