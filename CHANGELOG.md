@@ -6,23 +6,24 @@ This major release transforms `pi-research` from a heuristic-based fetching tool
 
 By replacing the heavyweight BitNet JSON-planner with the new **Hybrid Tiny-Router Architecture**, agents can now perform hallucination-free, high-quality research with sub-millisecond routing latency—requiring absolute zero setup.
 
-### Major Architectural Breakthroughs
+### Added
 - **The Tiny-Router (Hybrid Architecture):** Introduced a heavily optimized Node.js-to-Python IPC daemon (`daemon.py`) using `spawn` and line-delimited JSON-RPC 2.0. This handles machine learning tasks via Model2Vec and lightweight ML classifiers without exhausting system resources.
+- **Structured ML Capabilities:** Added deterministic "Structured Features" extraction (like `has_authority`, `conflict_state`, `source_count`) for conflict and sufficiency tasks. The router evaluates these features using ultra-fast Logistic Regression, achieving **100% accuracy on unseen Follow-Up task evaluations**.
+- **Remote Deploy & Evaluation Scripts:** Added `deploy-server-runtime.sh`, `eval_domain_unknown.py`, and the unyielding `eval_unseen_hard.js` dataset to continuously stress-test the model's accuracy.
+
+### Changed
 - **Lightning-Fast Domain Routing:** Replaced slow generative LLM routing with a Model2Vec + SVC classifier.
   - *Performance:* p95 latency is **< 0.6 ms** per query.
   - *Accuracy:* Achieved 0% high-risk downgrades. Security and Paper queries are strictly protected and never downgraded to generic "web" searches.
-- **Structured ML over Generative SLMs:** The system now extracts deterministic "Structured Features" (like `has_authority`, `conflict_state`, `source_count`) from research data. Using ultra-fast Logistic Regression, the system achieves **100% accuracy on unseen Follow-Up task evaluations**.
-- **BitNet Deprecation:** Completely removed the legacy BitNet/local-SLM JSON planner dependencies. `pi-research` is now lighter, more stable, and entirely zero-setup out of the box.
+- **Centralized Retrieval Policy:** Extracted and unified duplicated Blocked/Placeholder detection regexes (`PLACEHOLDER_PATTERNS`) from the ML feature extractor into the core `research-policy.js` to ensure models and heuristics share the exact same rules.
+- **Query Planning Engine:** The planning loop is now purely deterministic and heavily leverages the tiny-router hooks instead of generative JSON planning.
 
-### Enhanced Policies & Accuracy
-- **Centralized Retrieval Policy:** Extracted and unified duplicated Blocked/Placeholder detection regexes (`PLACEHOLDER_PATTERNS`) from the ML feature extractor into the core `research-policy.js`.
-- **Follow-Up Search Deadlock Fixed:** Hardened `lib/web-research.js` to strictly enforce the Tiny-Router's `stop` decisions. If the model determines that no further sources are needed, the agent gracefully finishes the fetch rounds instead of being overridden by legacy heuristics.
-- **Veto-Power for High-Risk Queries:** The Sufficiency Model now acts as a strict gatekeeper. If a security query only finds blog posts, the model vetos the completion and forces a `need_authority` follow-up round to fetch official NIST/CVE data.
+### Fixed
+- **Follow-Up Search Deadlock:** Hardened `lib/web-research.js` to strictly enforce the Tiny-Router's `stop` decisions. If the model determines that no further sources are needed, the agent gracefully finishes the fetch rounds instead of being overridden by legacy heuristics.
+- **High-Risk Veto Power:** Fixed premature loop termination for high-risk domains. The Sufficiency Model now acts as a strict gatekeeper. If a security query only finds blog posts, the model vetos completion and forces a `need_authority` follow-up round to fetch official NIST/CVE data.
 
-### Prepared for the Future (Unreleased/Roadmap)
-- **Weak Supervision Readiness:** The data pipeline is primed to inject LLM-generated synthetic queries to push underrepresented domains (`papers`, `package-registry`) to >95% accuracy.
-- **Active Learning Telemetry:** Implemented logging (`tiny_router_fallback`) to allow offline clustering of low-confidence predictions, enabling continuous "self-healing".
-- **Cross-Encoder Roadmap:** Prepared the infrastructure to eventually replace the structured Logistic Regression conflict detection with a fine-tuned Cross-Encoder (MiniLM NLI) for deep semantic contradiction detection.
+### Removed
+- **BitNet Deprecation:** Completely removed the legacy BitNet/local-SLM JSON planner dependencies (`lib/local-slm.js`, `lib/local-slm-setup.js`), test files, and CLI commands. `pi-research` is now lighter, more stable, and entirely zero-setup out of the box.
 
 ## 1.3.1
 
