@@ -14,14 +14,16 @@
 
 ## 💡 Why `pi-research`?
 
-When building autonomous AI agents, standard web-search tools often fail. They retrieve SEO spam, waste tokens in endless follow-up loops, and fail to recognize when sources contradict each other. 
+The world does not need just another "AI Search Engine"—there are plenty of massive, standalone research tools out there. 
 
-`pi-research` solves this by automating the entire cognitive loop of a researcher:
-1. **Precision Routing:** It knows exactly where to look (GitHub, NPM, NIST, arXiv).
-2. **Authority First:** It prioritizes official documentation over random blog posts.
-3. **Self-Awareness:** It extracts structured features to know when it lacks information, safely triggering follow-up questions before returning an answer.
+Instead, `pi-research` was built specifically to solve a crucial problem in the **Agentic Workflow**: When an autonomous agent is deep in a coding loop, compiling errors, or debugging, it needs hard facts instantly without losing focus. Calling out to heavy external search services or trying to execute brittle Playwright scripts breaks the agent's flow, wastes context window tokens, and leads to hallucinations.
 
-Best of all? **Zero setup.** No external search API keys to configure, no heavy local LLMs to run, and no flaky browser automation scripts to maintain.
+`pi-research` solves this by providing a lightweight, internal **cognitive research loop** directly into the agent harness:
+1. **Agent-Centric Routing:** It knows exactly where developers look (GitHub, NPM, NIST, arXiv).
+2. **Authority First:** It prioritizes official documentation over random SEO-optimized tutorials.
+3. **Self-Awareness:** It extracts structured features to know when it lacks information, safely triggering follow-up questions *before* returning an answer to the agent.
+
+Best of all? **Zero setup.** No external search API keys to configure, no heavy local LLMs to run, and no flaky browser automation scripts to maintain. It's built to run silently and reliably alongside your agent.
 
 ---
 
