@@ -94,7 +94,7 @@ Once installed, your agent has access to the `pi-research` tool. It accepts a `q
 With `1.4.0`, `pi-research` shifted from heavy, generative JSON-planners to a **Hybrid Tiny-Router Architecture**.
 
 - **Model2Vec & SVC:** Queries are classified via locally embedded features. Security and paper queries have a 0% downgrade rate.
-- **Structured ML:** Instead of asking a heavy LLM "Is this enough data?", the system extracts deterministic features (`has_authority`, `conflict_state`) and uses an ultra-fast Logistic Regression model to evaluate sufficiency and follow-up actions with 100% evaluated accuracy.
+- **Structured ML:** Instead of asking a heavy LLM "Is this enough data?", the system extracts deterministic features (`has_authority`, `conflict_state`) and uses an ultra-fast Logistic Regression model to evaluate sufficiency and follow-up actions wich achieved 100% accuracy on the included  eval_unseen_hard.js  benchmark dataset (121 test cases)” 
 - **Node.js-to-Python IPC:** Operates entirely locally using a highly optimized, line-delimited JSON-RPC daemon to manage Python dependencies (`Scrapling`, `Model2Vec`) without memory leaks.
 
 ---
@@ -102,7 +102,7 @@ With `1.4.0`, `pi-research` shifted from heavy, generative JSON-planners to a **
 ## 🛣️ Future Roadmap
 
 We are actively working on scaling the reasoning capabilities:
-- **LLM Data Augmentation (Weak Supervision):** Generating synthetic training data for underconfident domains to boost zero-shot accuracy to >95% without manual labeling.
+- **LLM Data Augmentation (Weak Supervision):** Generating synthetic training data for underconfident domains to boost zero-shot accuracy targeting >95%”  without manual labeling.
 - **Active Learning Telemetry Loop:** Clustering low-confidence predictions from cache logs into a weakly-supervised retraining pipeline to let the system "self-heal."
 - **Cross-Encoder for Conflict Detection:** Transitioning to a fine-tuned Cross-Encoder (e.g., MiniLM + Natural Language Inference) to detect deep semantic contradiction across differing texts (e.g., recognizing that "Node 20 is stable" contradicts "Node 20 is broken").
 
