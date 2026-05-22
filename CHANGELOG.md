@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1 (Hotfix)
+
+- **Fixed Bundle Configuration:** Added `ml` directory to `package.json` files array to ensure the Python daemon scripts and local ML models (`.joblib`) are correctly included in the npm published tarball. This ensures the zero-setup architecture functions securely out of the box after fresh installations.
+
 ## 1.4.0 (The Agentic Router Update)
 
 This major release transforms `pi-research` from a heuristic-based fetching tool into a blazing-fast, machine-learning-driven research engine explicitly optimized for autonomous AI coding agents. 

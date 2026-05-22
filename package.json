@@ -1,20 +1,21 @@
 {
   "name": "pi-research",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": false,
   "type": "module",
   "description": "Zero-setup grounded web research for AI coding agents.",
   "license": "MIT",
   "main": "./index.js",
   "bin": {
-    "pi-research": "./bin/pi-research.js",
-    "unblind-mcp": "./bin/unblind-mcp.js"
+    "pi-research": "bin/pi-research.js",
+    "unblind-mcp": "bin/unblind-mcp.js"
   },
   "files": [
     "bin",
     "extensions",
     "index.js",
     "lib",
+    "ml",
     "mcp",
     "mcp-server.js",
     "pi-research.js",
