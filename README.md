@@ -1,114 +1,36 @@
-# pi-research
+# ⚠️ This package has moved
 
-![pi-research logo](docs/assets/pi-research-logo.png)
+> **`pi-research` is deprecated and will no longer receive updates.**
 
-[![npm version](https://img.shields.io/npm/v/pi-research?color=blue)](https://www.npmjs.com/package/pi-research)
-[![tests](https://img.shields.io/badge/tests-121%2F121-brightgreen)](https://github.com/endgegnerbert-tech/pi-research)
-[![Pi package](https://img.shields.io/badge/pi-package-blueviolet)](https://pi.ai)
+## 👉 Please migrate to [`emet`](https://www.npmjs.com/package/emet)
 
-**The Zero-Setup Research Engine for Autonomous AI Agents.**
-
-`pi-research` is an advanced grounding tool designed specifically for AI coding agents. It prevents agents from hallucinating API endpoints, guessing library versions, or inventing CVE details by injecting real-time, highly authoritative, and conflict-resolved web research directly into their context window.
-
-![community packs](docs/assets/pi-research-community.png)
-
-## 💡 Why `pi-research`?
-
-The world does not need just another "AI Search Engine"—there are plenty of massive, standalone research tools out there. 
-
-Instead, `pi-research` was built specifically to solve a crucial problem in the **Agentic Workflow**: When an autonomous agent is deep in a coding loop, compiling errors, or debugging, it needs hard facts instantly without losing focus. Calling out to heavy external search services or trying to execute brittle Playwright scripts breaks the agent's flow, wastes context window tokens, and leads to hallucinations.
-
-`pi-research` solves this by providing a lightweight, internal **cognitive research loop** directly into the agent harness:
-1. **Agent-Centric Routing:** It knows exactly where developers look (GitHub, NPM, NIST, arXiv).
-2. **Authority First:** It prioritizes official documentation over random SEO-optimized tutorials.
-3. **Self-Awareness:** It extracts structured features to know when it lacks information, safely triggering follow-up questions *before* returning an answer to the agent.
-
-Best of all? **Zero setup.** No external search API keys to configure, no heavy local LLMs to run, and no flaky browser automation scripts to maintain. It's built to run silently and reliably alongside your agent.
-
----
-
-## ✨ Features
-
-- 🚀 **Lightning Fast:** Powered by a Hybrid Tiny-Router Architecture (Model2Vec + SVC), routing queries in **< 0.6 milliseconds**.
-- 🛡️ **Anti-Hallucination:** Built-in Veto-Power for high-risk queries. If a security question only finds blog posts, the system forces a follow-up to find authoritative NIST/CVE data.
-- 🕸️ **Resilient Fetching:** Pre-emptively escalates blocked, JS-heavy, or thin pages through an integrated, robust Python `Scrapling` daemon (via IPC JSON-RPC 2.0).
-- 🧩 **Domain Packs:** Built-in heuristics for `github`, `security`, `papers`, `package-registry`, and more.
-- 📊 **Structured Outputs:** Returns citations, code blocks, missing aspects, confidence scores, and conflict summaries (e.g., "Source A contradicts Source B").
-- 📂 **Local Context:** Ingests local files (`options.files`) to ground web research in your current repository context.
-
----
-
-## 📦 Installation
-
-### Pi Coding Agent (Extension)
-If you are using the Pi Agent harness, install the extension directly:
 ```bash
-pi install npm:pi-research
-```
+# Uninstall old package
+npm uninstall -g pi-research
 
-### Node.js / NPM (Standalone Server)
-Install it globally to expose the MCP (Model Context Protocol) server for any compatible AI agent:
-```bash
-npm install -g pi-research
-pi-research
-```
-*(The MCP server identifies itself as `unblind-mcp`, exposing the tool `pi-research`)*
+# Install new package
+npm install -g emet
 
----
-
-## 🚀 Quick Start / Usage
-
-Once installed, your agent has access to the `pi-research` tool. It accepts a `query`, a `mode`, and various `options`.
-
-### Modes
-| Mode | Best for |
-| --- | --- |
-| `fast` | Quick factual lookups (e.g., "What is the latest LTS version of Node.js?"). Stops fetching early if authoritative sources are found. |
-| `deep` | Broader retrieval with automatic follow-up rounds. Perfect for comparisons, conflicts, or unclear architecture questions. |
-| `code` | Docs, repositories, README-driven answers, and retrieving actual code snippets. |
-| `academic` | Scholarly sources, DOI links, and paper-heavy topics. |
-
-### Example Tool Calls (For Agents)
-**Factual Lookup:**
-```json
-{
-  "query": "React 19 RC release notes",
-  "mode": "fast",
-  "options": { "requireAuthoritative": true }
-}
-```
-
-**Architecture Research:**
-```json
-{
-  "query": "Compare PostgreSQL and MySQL for multi-tenant SaaS",
-  "mode": "deep",
-  "options": { "preferRecent": true, "maxTurns": 2 }
-}
+# Pi Extension
+pi install npm:emet
 ```
 
 ---
 
-## 🧠 Under the Hood: The Agentic Router Update (v1.4.0)
+### What changed?
 
-With `1.4.0`, `pi-research` shifted from heavy, generative JSON-planners to a **Hybrid Tiny-Router Architecture**.
+`pi-research` has been rebranded to **`emet`** (Hebrew for truth/fact) — a cleaner, standalone identity that better reflects what the tool does: it grounds AI agents in factual, real-time context.
 
-- **Model2Vec & SVC:** Queries are classified via locally embedded features. Security and paper queries have a 0% downgrade rate.
-- **Structured ML:** Instead of asking a heavy LLM "Is this enough data?", the system extracts deterministic features (`has_authority`, `conflict_state`) and uses an ultra-fast Logistic Regression model to evaluate sufficiency and follow-up actions wich achieved 100% accuracy on the included  eval_unseen_hard.js  benchmark dataset (121 test cases)” 
-- **Node.js-to-Python IPC:** Operates entirely locally using a highly optimized, line-delimited JSON-RPC daemon to manage Python dependencies (`Scrapling`, `Model2Vec`) without memory leaks.
+| Old | New |
+|---|---|
+| `pi-research` | `emet` |
+| `unblind-mcp` (MCP server) | `emet-mcp` |
+| `PI_RESEARCH_*` env vars | `EMET_*` env vars |
+| `pi-research` tool name | `emet` tool name |
 
----
-
-## 🛣️ Future Roadmap
-
-We are actively working on scaling the reasoning capabilities:
-- **LLM Data Augmentation (Weak Supervision):** Generating synthetic training data for underconfident domains to boost zero-shot accuracy targeting >95%”  without manual labeling.
-- **Active Learning Telemetry Loop:** Clustering low-confidence predictions from cache logs into a weakly-supervised retraining pipeline to let the system "self-heal."
-- **Cross-Encoder for Conflict Detection:** Transitioning to a fine-tuned Cross-Encoder (e.g., MiniLM + Natural Language Inference) to detect deep semantic contradiction across differing texts (e.g., recognizing that "Node 20 is stable" contradicts "Node 20 is broken").
+All features, modes (`fast`, `deep`, `code`, `academic`), and the zero-setup
+architecture carry over 100%. No functionality was removed.
 
 ---
 
-## 📝 License & Notices
-- **License:** MIT
-- **Third-party notices:** See `THIRD_PARTY_NOTICES.md`
-- **GitHub:** [https://github.com/endgegnerbert-tech/pi-research](https://github.com/endgegnerbert-tech/pi-research)
+**GitHub:** [tomsej/emet](https://github.com/tomsej/emet)
