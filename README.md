@@ -2,17 +2,17 @@
 
 > **`pi-research` is deprecated and will no longer receive updates.**
 
-## 👉 Please migrate to [`emet`](https://www.npmjs.com/package/emet)
+## 👉 Please migrate to [`@black-knight.dev/emet`](https://www.npmjs.com/package/@black-knight.dev/emet)
 
 ```bash
 # Uninstall old package
 npm uninstall -g pi-research
 
 # Install new package
-npm install -g emet
+npm install -g @black-knight.dev/emet
 
 # Pi Extension
-pi install npm:emet
+pi install npm:@black-knight.dev/emet
 ```
 
 ---
@@ -23,7 +23,7 @@ pi install npm:emet
 
 | Old | New |
 |---|---|
-| `pi-research` | `emet` |
+| `pi-research` | `@black-knight.dev/emet` |
 | `unblind-mcp` (MCP server) | `emet-mcp` |
 | `PI_RESEARCH_*` env vars | `EMET_*` env vars |
 | `pi-research` tool name | `emet` tool name |
@@ -33,4 +33,4 @@ architecture carry over 100%. No functionality was removed.
 
 ---
 
-**GitHub:** [tomsej/emet](https://github.com/tomsej/emet)
+**GitHub:** [endgegnerbert-tech/emet](https://github.com/endgegnerbert-tech/emet)

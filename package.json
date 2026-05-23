@@ -1,9 +1,9 @@
 {
   "name": "pi-research",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "private": false,
   "type": "module",
-  "description": "⚠️ DEPRECATED: This package has moved to 'emet'. Run: npm install -g emet",
+  "description": "⚠️ DEPRECATED: This package has moved to '@black-knight.dev/emet'. Run: npm install -g @black-knight.dev/emet",
   "license": "MIT",
   "main": "./index.js",
   "bin": {
